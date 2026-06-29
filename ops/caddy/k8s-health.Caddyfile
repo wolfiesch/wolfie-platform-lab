@@ -1,5 +1,5 @@
 # BEGIN wolfie-platform-lab:k8s-health
-# Edge Caddy forwards to the K3s Caddy Service pinned in k8s/caddy.yaml.
+# Edge Caddy forwards to the K3s Caddy Service pinned in gitops/platform/caddy/k8s-health-caddy.yaml.
 k8s-health.wolfie.gg {
 	encode zstd gzip
 	reverse_proxy 10.43.7.40:80
