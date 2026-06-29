@@ -1,0 +1,7 @@
+# BEGIN wolfie-platform-lab:k8s-health
+# K3s health API lab. Upstream is the pinned ClusterIP in k8s/health-api.yaml.
+k8s-health.wolfie.gg {
+	encode zstd gzip
+	reverse_proxy 10.43.7.39:80
+}
+# END wolfie-platform-lab:k8s-health
