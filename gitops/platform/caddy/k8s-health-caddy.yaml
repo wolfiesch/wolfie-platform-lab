@@ -13,12 +13,12 @@ data:
       respond "not_found" 404
     }
 
-    k8s-health.wolfie.gg:8080 {
+    http://k8s-health.wolfie.gg:8080 {
       encode zstd gzip
       reverse_proxy wolfie-health-api.platform-lab.svc.cluster.local:80
     }
 
-    omp.wolfie.gg:8080 {
+    http://omp.wolfie.gg:8080 {
       encode zstd gzip
       redir * https://wolfiesch.github.io/omp-episodic-memory{uri} 302
     }
@@ -40,7 +40,7 @@ spec:
       labels:
         app.kubernetes.io/name: k8s-health-caddy
       annotations:
-        platform-lab.wolfie.gg/caddy-config-revision: omp-route-v1
+        platform-lab.wolfie.gg/caddy-config-revision: omp-route-v2
     spec:
       containers:
         - name: caddy
