@@ -6,21 +6,24 @@ metadata:
 data:
   Caddyfile: |
     :8080 {
-      handle /caddy-healthz {
+      encode zstd gzip
+
+      @caddyHealth path /caddy-healthz
+      handle @caddyHealth {
         respond "ok" 200
       }
 
+      @k8sHealth host k8s-health.wolfie.gg
+      handle @k8sHealth {
+        reverse_proxy wolfie-health-api.platform-lab.svc.cluster.local:80
+      }
+
+      @omp host omp.wolfie.gg
+      handle @omp {
+        redir * https://wolfiesch.github.io/omp-episodic-memory{uri} 302
+      }
+
       respond "not_found" 404
-    }
-
-    http://k8s-health.wolfie.gg:8080 {
-      encode zstd gzip
-      reverse_proxy wolfie-health-api.platform-lab.svc.cluster.local:80
-    }
-
-    http://omp.wolfie.gg:8080 {
-      encode zstd gzip
-      redir * https://wolfiesch.github.io/omp-episodic-memory{uri} 302
     }
 ---
 apiVersion: apps/v1
@@ -40,7 +43,7 @@ spec:
       labels:
         app.kubernetes.io/name: k8s-health-caddy
       annotations:
-        platform-lab.wolfie.gg/caddy-config-revision: omp-route-v2
+        platform-lab.wolfie.gg/caddy-config-revision: omp-route-v3
     spec:
       containers:
         - name: caddy
