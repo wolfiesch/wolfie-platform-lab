@@ -2,6 +2,8 @@
 # Edge Caddy forwards to the K3s Caddy Service pinned in gitops/platform/caddy/k8s-health-caddy.yaml.
 k8s-health.wolfie.gg {
 	encode zstd gzip
-	reverse_proxy 10.43.7.40:80
+	reverse_proxy 10.43.7.40:80 {
+		header_down -Server
+	}
 }
 # END wolfie-platform-lab:k8s-health
