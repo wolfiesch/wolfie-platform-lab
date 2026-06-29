@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: wolfie-health-api:0.1.0
+          image: ghcr.io/wolfiesch/wolfie-platform-lab:sha-5b5baf0fd582712032858ebf3b07678ad74544a8
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
