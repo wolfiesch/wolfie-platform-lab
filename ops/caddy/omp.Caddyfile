@@ -1,0 +1,7 @@
+# BEGIN wolfie-platform-lab:omp
+# Edge Caddy forwards OMP redirect handling to K3s Caddy.
+omp.wolfie.gg {
+	encode zstd gzip
+	reverse_proxy 10.43.7.40:80
+}
+# END wolfie-platform-lab:omp

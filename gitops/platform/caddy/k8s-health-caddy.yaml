@@ -6,13 +6,21 @@ metadata:
 data:
   Caddyfile: |
     :8080 {
-      encode zstd gzip
-
       handle /caddy-healthz {
         respond "ok" 200
       }
 
+      respond "not_found" 404
+    }
+
+    k8s-health.wolfie.gg:8080 {
+      encode zstd gzip
       reverse_proxy wolfie-health-api.platform-lab.svc.cluster.local:80
+    }
+
+    omp.wolfie.gg:8080 {
+      encode zstd gzip
+      redir * https://wolfiesch.github.io/omp-episodic-memory{uri} 302
     }
 ---
 apiVersion: apps/v1
