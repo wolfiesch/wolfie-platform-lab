@@ -39,6 +39,8 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: k8s-health-caddy
+      annotations:
+        wolfie-platform-lab/config-revision: omp-route-v1
     spec:
       containers:
         - name: caddy
