@@ -77,8 +77,10 @@ section "K3s Lab"
 if command -v k3s >/dev/null 2>&1; then
   k3s_node=$(sudo k3s kubectl get nodes --no-headers 2>/dev/null | sed -n '1p' || true)
   k3s_health=$(sudo k3s kubectl -n platform-lab get deploy wolfie-health-api -o jsonpath='{.status.readyReplicas}/{.spec.replicas} ready' 2>/dev/null || true)
+  argo_health=$(sudo k3s kubectl -n argocd get application wolfie-health-api -o jsonpath='{.status.sync.status} {.status.health.status} {.status.sync.revision}' 2>/dev/null || true)
   printf '%-28s %s\n' "node" "${k3s_node:-unavailable}"
   printf '%-28s %s\n' "wolfie-health-api" "${k3s_health:-unavailable}"
+  printf '%-28s %s\n' "argo wolfie-health-api" "${argo_health:-unavailable}"
 else
   printf '%-28s %s\n' "k3s" "missing"
 fi
