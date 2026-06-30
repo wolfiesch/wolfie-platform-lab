@@ -23,6 +23,11 @@ data:
         redir * https://wolfiesch.github.io/omp-episodic-memory{uri} 302
       }
 
+      @freakoff host freakoff.wolfie.gg
+      handle @freakoff {
+        reverse_proxy freakoff-web-shadow.platform-lab.svc.cluster.local:80
+      }
+
       respond "not_found" 404
     }
 ---
@@ -43,7 +48,7 @@ spec:
       labels:
         app.kubernetes.io/name: k8s-health-caddy
       annotations:
-        platform-lab.wolfie.gg/caddy-config-revision: omp-route-v3
+        platform-lab.wolfie.gg/caddy-config-revision: freakoff-shadow-v1
     spec:
       containers:
         - name: caddy
