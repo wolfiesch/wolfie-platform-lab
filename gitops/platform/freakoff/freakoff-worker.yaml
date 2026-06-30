@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freakoff-worker
+  namespace: platform-lab
+  labels:
+    app.kubernetes.io/name: freakoff-worker
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: freakoff-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: freakoff-worker
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: worker
+          image: freakoff-worker:latest
+          imagePullPolicy: IfNotPresent
+          command: ["npm", "run", "worker"]
+          envFrom:
+            - secretRef:
+                name: freakoff-shadow-env
+          volumeMounts:
+            - name: upload-tmp
+              mountPath: /app/uploads
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+      volumes:
+        - name: upload-tmp
+          hostPath:
+            path: /var/lib/docker/volumes/freakoff_upload_tmp/_data
+            type: Directory
