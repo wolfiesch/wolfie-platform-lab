@@ -22,7 +22,8 @@ sudo awk -v marker_prefix="${MARKER_PREFIX}" '
   index($0, "# END " marker_prefix) == 1 { managed=0; next }
   $0 ~ /^# ---- K3s health API lab/ { next }
   $0 ~ /^# ---- omp-episodic-memory redirect/ { next }
-  $0 ~ /^(k8s-health|omp)[.]wolfie[.]gg[[:space:]]*\{/ { legacy=1; depth=1; next }
+  $0 ~ /^# ---- Freakoff / { next }
+  $0 ~ /^(k8s-health|omp|freakoff)[.]wolfie[.]gg[[:space:]]*\{/ { legacy=1; depth=1; next }
   legacy {
     depth += gsub(/\{/, "{")
     depth -= gsub(/\}/, "}")

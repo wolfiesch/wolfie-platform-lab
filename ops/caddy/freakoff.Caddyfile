@@ -1,0 +1,9 @@
+# BEGIN wolfie-platform-lab:freakoff
+# Edge Caddy forwards Freak Off web traffic to K3s Caddy.
+freakoff.wolfie.gg {
+	encode zstd gzip
+	reverse_proxy 10.43.7.40:80 {
+		header_down -Server
+	}
+}
+# END wolfie-platform-lab:freakoff
