@@ -42,9 +42,15 @@ done
 # Dropping the retired wolfie-platform-lab:omp block is only safe once the
 # ompdocs block serves omp.wolfie.gg; otherwise the host would lose its site.
 if [ "$(grep -c -x -F '# BEGIN ompdocs' "${tmp}" || true)" != 1 ] ||
-  [ "$(grep -c -x -F '# END ompdocs' "${tmp}" || true)" != 1 ]; then
+  [ "$(grep -c -x -F '# END ompdocs' "${tmp}" || true)" != 1 ] ||
+  ! awk '
+    $0 == "# BEGIN ompdocs" { inside=1; next }
+    $0 == "# END ompdocs" { inside=0; next }
+    inside && /^omp[.]wolfie[.]gg[[:space:]]*\{[[:space:]]*$/ { hosts++ }
+    END { exit !(hosts == 1 && !inside) }
+  ' "${tmp}"; then
   rm -f "${tmp}"
-  printf 'refusing: %s must hold exactly one ompdocs block for omp.wolfie.gg; run the omp-episodic-memory edge cutover first (backup=%s)\n' "${REMOTE_CADDYFILE}" "${backup}" >&2
+  printf 'refusing: %s must hold exactly one ompdocs block containing omp.wolfie.gg; run the omp-episodic-memory edge cutover first (backup=%s)\n' "${REMOTE_CADDYFILE}" "${backup}" >&2
   exit 1
 fi
 

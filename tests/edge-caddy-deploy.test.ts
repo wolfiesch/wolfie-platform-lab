@@ -136,4 +136,16 @@ describe("edge Caddy deploy rewrite", () => {
     expect(result.stderr.toString()).toContain("ompdocs");
     expect(host.read()).toBe(initial);
   });
+
+  test.each([
+    ["empty marked block", "# BEGIN ompdocs\n# END ompdocs\n"],
+    ["different hostname", ompdocsBlock.replace("omp.wolfie.gg {", "other.example {")],
+    ["host outside markers", "# BEGIN ompdocs\n# END ompdocs\nomp.wolfie.gg {\n\trespond \"outside\" 200\n}\n"],
+  ])("refuses a cutover with %s", (_name, block) => {
+    const initial = edgeCaddyfile(retiredOmpBlock + block);
+    const host = edge(initial);
+
+    expect(host.deploy().exitCode).not.toBe(0);
+    expect(host.read()).toBe(initial);
+  });
 });
